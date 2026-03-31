@@ -1,0 +1,1 @@
+Using Claude to do all of the following: Creating a new case in The CaseWork App. Test plan and test cases first were created in Jira after connecting Claude, then the test cases were automated using the webdriverIO framework and then all the test cases were also copied to GitHub as issues.
