@@ -43,7 +43,10 @@ test/
 ## Conventions
 
 - All page objects extend `Base` and export a singleton: `export default new ClassName()`
-- Selectors are always getters defined in page objects — never strings in spec files
+- Selectors are always defined as getters (or methods for dynamic/scoped selectors) in page objects — never raw selector strings in spec files or inside page object methods. Every `$(...)` / `$$(...)` call must live in a getter or method definition, and all other code must call that getter/method:
+  - Static elements → `get dialog() { return $('[role="dialog"]') }`, used as `this.dialog`
+  - Dynamic elements (need a parameter) → `calendarDayButton(label) { return $(\`button[aria-label*="${label}"]\`) }`, used as `this.calendarDayButton(label)`
+  - Row-scoped elements → `deleteButton(row) { return row.$('button[aria-label="Delete"]') }`, used as `this.deleteButton(row)`
 - Spec files contain only `describe`/`it`/`before`/`beforeEach`/`afterEach` blocks — no helper functions, no `const`/`let` declarations outside test scope, no logic
 - All test data is stored as getters on the relevant page object, prefixed with `AUTOTEST`
 - `NewCase` generates a datetime string once in its constructor (`this._ts`) and appends it to all name getters so each run inputs unique values — add new name getters the same way
