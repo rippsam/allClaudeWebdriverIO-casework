@@ -104,9 +104,19 @@ class NewCase extends Base {
         return $('[role="dialog"]')
     }
 
+    // Checkboxes inside the open dialog (user list or contact list)
+    get dialogCheckboxes() {
+        return $$('[role="dialog"] .fui-Checkbox__input')
+    }
+
     // MessageBar that appears when Create is clicked with missing required fields
     get missingFieldsError() {
         return $('.fui-MessageBar')
+    }
+
+    // Calendar day button — only present when the date picker dialog is open
+    calendarDayButton(dayLabel) {
+        return $(`button[aria-label*="${dayLabel}"]`)
     }
 
     // ── Navigation ────────────────────────────────────────────────────────────
@@ -183,11 +193,11 @@ class NewCase extends Base {
     // Clicks the date input, waits for the calendar, then clicks today's date
     async selectTodayRetainedDate() {
         await this.retainedDateInput.click()
-        await $('[role="dialog"]').waitForDisplayed()
+        await this.dialog.waitForDisplayed()
         const today = new Date()
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         const dayLabel = `${today.getDate()}, ${months[today.getMonth()]}`
-        await $(`button[aria-label*="${dayLabel}"]`).click()
+        await this.calendarDayButton(dayLabel).click()
     }
 
     // Clicks the Retained By combobox, waits for clients to load, selects by name
@@ -222,10 +232,10 @@ class NewCase extends Base {
         await this.assignCaseButton.click()
         await this.dialog.waitForDisplayed()
         await browser.waitUntil(
-            async () => (await $$('[role="dialog"] .fui-Checkbox__input')).length > 0,
+            async () => (await this.dialogCheckboxes).length > 0,
             { timeout: 10000, interval: 500 }
         )
-        const firstCheckbox = (await $$('[role="dialog"] .fui-Checkbox__input'))[0]
+        const firstCheckbox = (await this.dialogCheckboxes)[0]
         await firstCheckbox.click()
         await this.assignCaseSubmitButton.click()
         await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
@@ -237,10 +247,10 @@ class NewCase extends Base {
         await this.addAffiliatedPartyButton.click()
         await this.dialog.waitForDisplayed()
         await browser.waitUntil(
-            async () => (await $$('[role="dialog"] .fui-Checkbox__input')).length > 0,
+            async () => (await this.dialogCheckboxes).length > 0,
             { timeout: 10000, interval: 500 }
         )
-        const firstCheckbox = (await $$('[role="dialog"] .fui-Checkbox__input'))[0]
+        const firstCheckbox = (await this.dialogCheckboxes)[0]
         await browser.execute((el) => el.click(), firstCheckbox)
         await this.addPartySubmitButton.click()
         await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
