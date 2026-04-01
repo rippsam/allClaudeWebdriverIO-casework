@@ -29,6 +29,17 @@ test/
 `.env` — `TEST_EMAIL` / `TEST_PASSWORD` credentials
 `.auth-tokens.json` — cached session tokens (auto-generated; delete to force re-login)
 
+## Language and style
+
+- **JavaScript** (ESModules — `import`/`export`, no CommonJS `require`)
+- **No semicolons**
+- **4-space indentation**
+- **camelCase** for variables, methods, and file names (`newCase.js`, `deleteAllByName`)
+- **PascalCase** for classes (`Base`, `NewCase`, `Cases`)
+- **async/await** for all asynchronous code — no raw Promises or `.then()` chains
+- **Arrow functions** for callbacks and inline functions
+- Prefer `const` over `let`; never use `var`
+
 ## Conventions
 
 - All page objects extend `Base` and export a singleton: `export default new ClassName()`
