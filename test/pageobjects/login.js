@@ -15,8 +15,10 @@ class Login extends Base {
     }
 
     async signIn(username, password) {
+        await this.usernameField.waitForDisplayed({ timeout: 15000 })
         await this.usernameField.setValue(username)
         await this.passwordField.setValue(password)
+        await this.signInButton.waitForClickable()
         await this.signInButton.click()
     }
 

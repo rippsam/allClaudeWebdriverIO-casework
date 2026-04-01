@@ -36,7 +36,7 @@ export async function ensureAuthenticated() {
             // tokens expired, fall through to full sign in
         }
     }
-    await Login.navigateToLogin()
+    await Login.navigateToLoginPage()
     await Login.signIn(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
     await Dashboard.navDashboard.waitForDisplayed({ timeout: 15000, interval: 500 })
     await saveSessionTokens()

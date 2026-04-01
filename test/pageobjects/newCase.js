@@ -19,6 +19,8 @@ class NewCase extends Base {
     get validCaseName()       { return `AUTOTEST Valid Case Name ${this._ts}` }
     get requiredFieldName()   { return `AUTOTEST Required Field ${this._ts}` }
     get missingFieldsName()   { return `AUTOTEST Missing Fields ${this._ts}` }
+    get descriptionText()     { return `AUTOTEST Description ${this._ts}` }
+    get overviewText()        { return `AUTOTEST Overview ${this._ts}` }
 
     // ── Input fields ──────────────────────────────────────────────────────────
 
@@ -71,6 +73,18 @@ class NewCase extends Base {
 
     get addEventButton() {
         return $('[data-testid="case-events-add-event-btn"]')
+    }
+
+    get billedHourlySwitch() {
+        return $('[data-testid="case-info-card-fixed-fee-switch"]')
+    }
+
+    get assignCaseSubmitButton() {
+        return $('[data-testid="select-users-dialog-submit"]')
+    }
+
+    get addPartySubmitButton() {
+        return $('[data-testid="affiliated-party-dialog-add-party-button"]')
     }
 
     // ── Dynamic elements ──────────────────────────────────────────────────────
@@ -192,6 +206,39 @@ class NewCase extends Base {
             }
         }
         throw new Error(`Client "${clientName}" not found in Retained By options`)
+    }
+
+    async toggleBilledHourly() {
+        await this.billedHourlySwitch.click()
+    }
+
+    // Opens the Assign Case dialog, selects the first user, and confirms
+    async assignFirstUser() {
+        await this.assignCaseButton.click()
+        await this.dialog.waitForDisplayed()
+        await browser.waitUntil(
+            async () => (await $$('[role="dialog"] .fui-Checkbox__input')).length > 0,
+            { timeout: 10000, interval: 500 }
+        )
+        const firstCheckbox = (await $$('[role="dialog"] .fui-Checkbox__input'))[0]
+        await firstCheckbox.click()
+        await this.assignCaseSubmitButton.click()
+        await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
+    }
+
+    // Opens the Add Affiliated Party dialog, selects the first contact, and confirms
+    // The checkbox is obscured by the Persona overlay — use JS click to bypass
+    async addFirstAffiliatedParty() {
+        await this.addAffiliatedPartyButton.click()
+        await this.dialog.waitForDisplayed()
+        await browser.waitUntil(
+            async () => (await $$('[role="dialog"] .fui-Checkbox__input')).length > 0,
+            { timeout: 10000, interval: 500 }
+        )
+        const firstCheckbox = (await $$('[role="dialog"] .fui-Checkbox__input'))[0]
+        await browser.execute((el) => el.click(), firstCheckbox)
+        await this.addPartySubmitButton.click()
+        await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
     }
 
     async clickCreate() {
