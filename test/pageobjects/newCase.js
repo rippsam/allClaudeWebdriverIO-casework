@@ -2,14 +2,23 @@ import { $, $$, browser } from '@wdio/globals'
 import Base from './base.js'
 
 class NewCase extends Base {
+    constructor() {
+        super()
+        const now = new Date()
+        this._ts = now.toISOString().replace('T', ' ').slice(0, 19)
+    }
+
     // ── Test data ─────────────────────────────────────────────────────────────
     get xssPayload() { return "<script>alert('xss')</script>" }
     get sqlPayload() { return "' OR '1'='1" }
-    get createMinName() { return 'AUTOTEST Create Min' }
-    get createAllFieldsName() { return 'AUTOTEST Create All Fields' }
     get retainedByClient() { return 'AUTOTEST Client' }
-    get deleteHoverName() { return 'AUTOTEST Delete Hover' }
-    get deleteMenuName() { return 'AUTOTEST Delete ThreeDots' }
+    get createMinName()       { return `AUTOTEST Create Min ${this._ts}` }
+    get createAllFieldsName() { return `AUTOTEST Create All Fields ${this._ts}` }
+    get deleteHoverName()     { return `AUTOTEST Delete Hover ${this._ts}` }
+    get deleteMenuName()      { return `AUTOTEST Delete ThreeDots ${this._ts}` }
+    get validCaseName()       { return `AUTOTEST Valid Case Name ${this._ts}` }
+    get requiredFieldName()   { return `AUTOTEST Required Field ${this._ts}` }
+    get missingFieldsName()   { return `AUTOTEST Missing Fields ${this._ts}` }
 
     // ── Input fields ──────────────────────────────────────────────────────────
 

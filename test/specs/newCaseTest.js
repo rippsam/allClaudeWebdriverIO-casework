@@ -15,7 +15,7 @@ describe('Create New Case - /case/new', () => {
     describe('Input Fields - Positive', () => {
         it('should accept valid text in the case name field', async () => {
             // MTQA-5200
-            await expect(await NewCase.typeCaseName('AUTOTEST Valid Case Name')).toBe('AUTOTEST Valid Case Name')
+            await expect(await NewCase.typeCaseName(NewCase.validCaseName)).toBe(NewCase.validCaseName)
         })
 
         it('should accept exactly 75 characters in the case name field (boundary)', async () => {
@@ -105,13 +105,13 @@ describe('Create New Case - /case/new', () => {
 
         it('should show the Create button once the case name is filled', async () => {
             // MTQA-5213 — Create button becomes visible after typing a case name
-            await NewCase.caseNameInput.setValue('AUTOTEST Required Field Test')
+            await NewCase.caseNameInput.setValue(NewCase.requiredFieldName)
             await expect(NewCase.createButton).toBeDisplayed()
         })
 
         it('should show a missing required fields error when Create is clicked without retained date and retained by', async () => {
             // MTQA-5225 — clicking Create with only a case name shows validation error for retained fields
-            await NewCase.fillCaseName('AUTOTEST Missing Fields Test')
+            await NewCase.fillCaseName(NewCase.missingFieldsName)
             await NewCase.clickCreate()
             await NewCase.missingFieldsError.waitForDisplayed()
             await expect(NewCase.missingFieldsError).toHaveText(expect.stringContaining('Missing required fields'))
