@@ -110,7 +110,7 @@ describe('Create New Case - /case/new', () => {
         })
 
         it('should show a missing required fields error when Create is clicked without retained date and retained by', async () => {
-            // MTQA-5225 — clicking Create with only a case name shows validation error for retained fields
+            // MTQA-5261 — clicking Create with only a case name shows validation error for retained fields
             await NewCase.fillCaseName(NewCase.missingFieldsName)
             await NewCase.clickCreate()
             await NewCase.missingFieldsError.waitForDisplayed()

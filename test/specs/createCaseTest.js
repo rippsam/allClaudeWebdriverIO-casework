@@ -24,7 +24,7 @@ describe('Create Case - Submit', () => {
     })
 
     it('should create a case with name only and redirect away from new case page', async () => {
-        // MTQA-5221 — minimum required fields: case name + retained date + retained by
+        // MTQA-5257 — minimum required fields: case name + retained date + retained by
         createdCaseName = NewCase.createMinName
         await NewCase.fillCaseName(createdCaseName)
         await NewCase.selectTodayRetainedDate()
@@ -35,7 +35,7 @@ describe('Create Case - Submit', () => {
     })
 
     it('should create a case with all fields filled and redirect away from new case page', async () => {
-        // MTQA-5222 — all available fields filled
+        // MTQA-5258 — all available fields filled
         createdCaseName = NewCase.createAllFieldsName
         await NewCase.fillCaseName(createdCaseName)
         await NewCase.selectTodayRetainedDate()
@@ -53,7 +53,7 @@ describe('Create Case - Submit', () => {
     })
 
     it('should create a case with a boundary-length case name and redirect away from new case page', async () => {
-        // MTQA-5223 — case name at max length (75 chars)
+        // MTQA-5259 — case name at max length (75 chars)
         createdCaseName = 'a'.repeat(75)
         await NewCase.fillCaseName(createdCaseName)
         await NewCase.selectTodayRetainedDate()
@@ -64,7 +64,7 @@ describe('Create Case - Submit', () => {
     })
 
     it('should create a case with special characters in the name and redirect away from new case page', async () => {
-        // MTQA-5224 — SQL injection payload as case name
+        // MTQA-5260 — SQL injection payload as case name
         createdCaseName = NewCase.sqlPayload
         await NewCase.fillCaseName(createdCaseName)
         await NewCase.selectTodayRetainedDate()
