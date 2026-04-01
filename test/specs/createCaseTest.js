@@ -1,20 +1,32 @@
 import { expect, browser } from '@wdio/globals'
 import NewCasePage from '../pageobjects/newCase.js'
+import CasesPage from '../pageobjects/casesPage.js'
 import ClientsPage from '../pageobjects/clientsPage.js'
 
 describe('Create Case - Submit', () => {
+    let createdCaseName = null
+
     before(async () => {
         await ClientsPage.ensureClientExists(NewCasePage.RETAINED_BY_CLIENT)
     })
 
     beforeEach(async () => {
+        createdCaseName = null
         await NewCasePage.navigateToNewCase()
         await NewCasePage.caseNameInput.waitForDisplayed()
     })
 
+    afterEach(async () => {
+        if (createdCaseName) {
+            await CasesPage.deleteAllByName(createdCaseName).catch(() => {})
+            createdCaseName = null
+        }
+    })
+
     it('should create a case with name only and redirect away from new case page', async () => {
         // MTQA-5221 — minimum required fields: case name + retained date + retained by
-        await NewCasePage.fillCaseName(NewCasePage.CREATE_MIN_NAME)
+        createdCaseName = NewCasePage.CREATE_MIN_NAME
+        await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
         await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
         await NewCasePage.clickCreate()
@@ -24,7 +36,8 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with all fields filled and redirect away from new case page', async () => {
         // MTQA-5222 — all available fields filled
-        await NewCasePage.fillCaseName(NewCasePage.CREATE_ALL_FIELDS_NAME)
+        createdCaseName = NewCasePage.CREATE_ALL_FIELDS_NAME
+        await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
         await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
         await NewCasePage.selectFirstCaseType()
@@ -38,7 +51,8 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with a boundary-length case name and redirect away from new case page', async () => {
         // MTQA-5223 — case name at max length (75 chars)
-        await NewCasePage.fillCaseName('a'.repeat(75))
+        createdCaseName = 'a'.repeat(75)
+        await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
         await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
         await NewCasePage.clickCreate()
@@ -48,7 +62,8 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with special characters in the name and redirect away from new case page', async () => {
         // MTQA-5224 — SQL injection payload as case name
-        await NewCasePage.fillCaseName(NewCasePage.SQL_PAYLOAD)
+        createdCaseName = NewCasePage.SQL_PAYLOAD
+        await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
         await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
         await NewCasePage.clickCreate()

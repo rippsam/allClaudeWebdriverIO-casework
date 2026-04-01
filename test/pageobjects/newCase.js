@@ -8,6 +8,8 @@ class NewCasePage extends BasePage {
     get CREATE_MIN_NAME() { return 'AUTOTEST Create Min' }
     get CREATE_ALL_FIELDS_NAME() { return 'AUTOTEST Create All Fields' }
     get RETAINED_BY_CLIENT() { return 'AUTOTEST Client' }
+    get DELETE_HOVER_NAME() { return 'AUTOTEST Delete Hover' }
+    get DELETE_MENU_NAME() { return 'AUTOTEST Delete ThreeDots' }
 
     // ── Input fields ──────────────────────────────────────────────────────────
 
