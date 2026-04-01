@@ -80,7 +80,7 @@ describe('Create New Case - /case/new', () => {
         it('should not execute XSS payload entered in the case name field', async () => {
             // MTQA-5210 — verify script tags are stored as plain text, not executed
             // Field stores the raw string (truncated to 75 chars by maxlength)
-            await expect(await NewCasePage.typeCaseName(NewCasePage.XSS_PAYLOAD)).not.toBe('')
+            await expect(await NewCasePage.typeCaseName(NewCasePage.xssPayload)).not.toBe('')
             // Verify no alert dialog was triggered
             const alertOpen = await browser.execute(() => {
                 try { window.alert = () => { window.__xssTriggered = true } } catch (e) {}
@@ -91,7 +91,7 @@ describe('Create New Case - /case/new', () => {
 
         it('should sanitize SQL injection payload in the case name field', async () => {
             // MTQA-5211 — verify SQL string is treated as plain text
-            await expect(await NewCasePage.typeCaseName(NewCasePage.SQL_PAYLOAD)).toBe(NewCasePage.SQL_PAYLOAD)
+            await expect(await NewCasePage.typeCaseName(NewCasePage.sqlPayload)).toBe(NewCasePage.sqlPayload)
         })
     })
 

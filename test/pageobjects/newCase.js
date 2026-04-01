@@ -3,13 +3,13 @@ import BasePage from './basePage.js'
 
 class NewCasePage extends BasePage {
     // ── Test data ─────────────────────────────────────────────────────────────
-    get XSS_PAYLOAD() { return "<script>alert('xss')</script>" }
-    get SQL_PAYLOAD() { return "' OR '1'='1" }
-    get CREATE_MIN_NAME() { return 'AUTOTEST Create Min' }
-    get CREATE_ALL_FIELDS_NAME() { return 'AUTOTEST Create All Fields' }
-    get RETAINED_BY_CLIENT() { return 'AUTOTEST Client' }
-    get DELETE_HOVER_NAME() { return 'AUTOTEST Delete Hover' }
-    get DELETE_MENU_NAME() { return 'AUTOTEST Delete ThreeDots' }
+    get xssPayload() { return "<script>alert('xss')</script>" }
+    get sqlPayload() { return "' OR '1'='1" }
+    get createMinName() { return 'AUTOTEST Create Min' }
+    get createAllFieldsName() { return 'AUTOTEST Create All Fields' }
+    get retainedByClient() { return 'AUTOTEST Client' }
+    get deleteHoverName() { return 'AUTOTEST Delete Hover' }
+    get deleteMenuName() { return 'AUTOTEST Delete ThreeDots' }
 
     // ── Input fields ──────────────────────────────────────────────────────────
 

@@ -7,7 +7,7 @@ describe('Create Case - Submit', () => {
     let createdCaseName = null
 
     before(async () => {
-        await ClientsPage.ensureClientExists(NewCasePage.RETAINED_BY_CLIENT)
+        await ClientsPage.ensureClientExists(NewCasePage.retainedByClient)
     })
 
     beforeEach(async () => {
@@ -25,10 +25,10 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with name only and redirect away from new case page', async () => {
         // MTQA-5221 — minimum required fields: case name + retained date + retained by
-        createdCaseName = NewCasePage.CREATE_MIN_NAME
+        createdCaseName = NewCasePage.createMinName
         await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
-        await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
+        await NewCasePage.selectRetainedBy(NewCasePage.retainedByClient)
         await NewCasePage.clickCreate()
         await NewCasePage.waitForCreation()
         await expect(browser).not.toHaveUrl(expect.stringContaining('/case/new'))
@@ -36,10 +36,10 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with all fields filled and redirect away from new case page', async () => {
         // MTQA-5222 — all available fields filled
-        createdCaseName = NewCasePage.CREATE_ALL_FIELDS_NAME
+        createdCaseName = NewCasePage.createAllFieldsName
         await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
-        await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
+        await NewCasePage.selectRetainedBy(NewCasePage.retainedByClient)
         await NewCasePage.selectFirstCaseType()
         await NewCasePage.selectFirstCaseStatus()
         await NewCasePage.typeDescription('AUTOTEST description')
@@ -54,7 +54,7 @@ describe('Create Case - Submit', () => {
         createdCaseName = 'a'.repeat(75)
         await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
-        await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
+        await NewCasePage.selectRetainedBy(NewCasePage.retainedByClient)
         await NewCasePage.clickCreate()
         await NewCasePage.waitForCreation()
         await expect(browser).not.toHaveUrl(expect.stringContaining('/case/new'))
@@ -62,10 +62,10 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with special characters in the name and redirect away from new case page', async () => {
         // MTQA-5224 — SQL injection payload as case name
-        createdCaseName = NewCasePage.SQL_PAYLOAD
+        createdCaseName = NewCasePage.sqlPayload
         await NewCasePage.fillCaseName(createdCaseName)
         await NewCasePage.selectTodayRetainedDate()
-        await NewCasePage.selectRetainedBy(NewCasePage.RETAINED_BY_CLIENT)
+        await NewCasePage.selectRetainedBy(NewCasePage.retainedByClient)
         await NewCasePage.clickCreate()
         await NewCasePage.waitForCreation()
         await expect(browser).not.toHaveUrl(expect.stringContaining('/case/new'))
