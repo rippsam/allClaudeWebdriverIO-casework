@@ -26,8 +26,7 @@ class Clients extends Base {
         await this.navigateToClientsPage()
         await this.createButton.waitForDisplayed({ timeout: 10000 })
 
-        // Wait for list to render and check if client already exists
-        await browser.waitUntil(async () => true, { timeout: 1500 }).catch(() => null)
+        // Check if client already exists
         const pageText = await browser.execute(() => document.body.innerText)
         if (pageText.includes(name)) return
 

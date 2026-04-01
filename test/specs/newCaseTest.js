@@ -14,7 +14,7 @@ describe('Create New Case - /case/new', () => {
 
     describe('Input Fields - Positive', () => {
         it('should accept valid text in the case name field', async () => {
-            // MTQA-5200
+            // MTQA-5200 — valid text accepted in the case name field
             await expect(await NewCase.typeCaseName(NewCase.validCaseName)).toBe(NewCase.validCaseName)
         })
 
@@ -24,22 +24,22 @@ describe('Create New Case - /case/new', () => {
         })
 
         it('should accept exactly 2000 characters in the notes field (boundary)', async () => {
-            // MTQA-5202
+            // MTQA-5202 — notes field accepts exactly 2000 characters
             await expect((await NewCase.typeNote('a'.repeat(2000))).length).toBe(2000)
         })
 
         it('should accept exactly 2000 characters in the overview field (boundary)', async () => {
-            // MTQA-5203
+            // MTQA-5203 — overview field accepts exactly 2000 characters
             await expect((await NewCase.typeOverview('a'.repeat(2000))).length).toBe(2000)
         })
 
         it('should accept exactly 200 characters in the description field (boundary)', async () => {
-            // MTQA-5204
+            // MTQA-5204 — description field accepts exactly 200 characters
             await expect((await NewCase.typeDescription('a'.repeat(200))).length).toBe(200)
         })
 
         it('should preserve case in the case name field', async () => {
-            // MTQA-5205
+            // MTQA-5205 — case name field preserves letter case
             await expect(await NewCase.typeCaseName('testcase')).toBe('testcase')
 
             await NewCase.caseNameInput.clearValue()
@@ -122,26 +122,26 @@ describe('Create New Case - /case/new', () => {
 
     describe('Dropdowns', () => {
         it('should populate the Type dropdown with options', async () => {
-            // MTQA-5214
+            // MTQA-5214 — Type dropdown populates with options
             await NewCase.openCaseTypeDropdown()
             await expect(await NewCase.getDropdownOptionCount()).toBeGreaterThan(0)
         })
 
         it('should populate the Status dropdown with options', async () => {
-            // MTQA-5215
+            // MTQA-5215 — Status dropdown populates with options
             await NewCase.openCaseStatusDropdown()
             await expect(await NewCase.getDropdownOptionCount()).toBeGreaterThan(0)
         })
 
         it('should update the Type combobox value when an option is selected', async () => {
-            // MTQA-5216
+            // MTQA-5216 — selecting a Type option updates the combobox value
             const selectedText = await NewCase.selectFirstCaseType()
             const value = await NewCase.caseTypeCombobox.getValue()
             await expect(value).toBe(selectedText)
         })
 
         it('should update the Status combobox value when an option is selected', async () => {
-            // MTQA-5217
+            // MTQA-5217 — selecting a Status option updates the combobox value
             const selectedText = await NewCase.selectFirstCaseStatus()
             const value = await NewCase.caseStatusCombobox.getValue()
             await expect(value).toBe(selectedText)
@@ -152,21 +152,21 @@ describe('Create New Case - /case/new', () => {
 
     describe('Action Buttons', () => {
         it('should open a dialog when Assign Case is clicked', async () => {
-            // MTQA-5218
+            // MTQA-5218 — Assign Case button opens a dialog
             await NewCase.assignCaseButton.click()
             await NewCase.dialog.waitForDisplayed()
             await expect(NewCase.dialog).toBeDisplayed()
         })
 
         it('should open a dialog when Add Affiliated Party is clicked', async () => {
-            // MTQA-5219
+            // MTQA-5219 — Add Affiliated Party button opens a dialog
             await NewCase.addAffiliatedPartyButton.click()
             await NewCase.dialog.waitForDisplayed()
             await expect(NewCase.dialog).toBeDisplayed()
         })
 
         it('should open a dialog when Add Event is clicked', async () => {
-            // MTQA-5220
+            // MTQA-5220 — Add Event button opens a dialog
             await NewCase.addEventButton.click()
             await NewCase.dialog.waitForDisplayed()
             await expect(NewCase.dialog).toBeDisplayed()

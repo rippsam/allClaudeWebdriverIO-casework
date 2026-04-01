@@ -11,6 +11,7 @@ class NewCase extends Base {
     // ── Test data ─────────────────────────────────────────────────────────────
     get xssPayload() { return "<script>alert('xss')</script>" }
     get sqlPayload() { return "' OR '1'='1" }
+    get maxLengthCaseName() { return 'a'.repeat(75) }
     get retainedByClient() { return 'AUTOTEST Client' }
     get createMinName()       { return `AUTOTEST Create Min ${this._ts}` }
     get createAllFieldsName() { return `AUTOTEST Create All Fields ${this._ts}` }
@@ -164,20 +165,21 @@ class NewCase extends Base {
         await this.firstDropdownOption.waitForDisplayed()
     }
 
-    async selectFirstCaseType() {
-        await this.openCaseTypeDropdown()
+    async _selectFirstOption() {
         const options = await this.dropdownOptions
         const text = await options[0].getText()
         await options[0].click()
         return text
     }
 
+    async selectFirstCaseType() {
+        await this.openCaseTypeDropdown()
+        return this._selectFirstOption()
+    }
+
     async selectFirstCaseStatus() {
         await this.openCaseStatusDropdown()
-        const options = await this.dropdownOptions
-        const text = await options[0].getText()
-        await options[0].click()
-        return text
+        return this._selectFirstOption()
     }
 
     // ── Create flow helpers ───────────────────────────────────────────────────
@@ -227,33 +229,32 @@ class NewCase extends Base {
         await this.billedHourlySwitch.click()
     }
 
-    // Opens the Assign Case dialog, selects the first user, and confirms
-    async assignFirstUser() {
-        await this.assignCaseButton.click()
+    // Opens a dialog, waits for checkboxes to load, clicks the first, and confirms.
+    // useJsClick=true bypasses Persona overlay interception via browser.execute
+    async _selectFirstInDialog(openBtn, submitBtn, useJsClick = false) {
+        await openBtn.click()
         await this.dialog.waitForDisplayed()
         await browser.waitUntil(
             async () => (await this.dialogCheckboxes).length > 0,
             { timeout: 10000, interval: 500 }
         )
         const firstCheckbox = (await this.dialogCheckboxes)[0]
-        await firstCheckbox.click()
-        await this.assignCaseSubmitButton.click()
+        if (useJsClick) {
+            await browser.execute((el) => el.click(), firstCheckbox)
+        } else {
+            await firstCheckbox.click()
+        }
+        await submitBtn.click()
         await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
     }
 
-    // Opens the Add Affiliated Party dialog, selects the first contact, and confirms
-    // The checkbox is obscured by the Persona overlay — use JS click to bypass
+    async assignFirstUser() {
+        await this._selectFirstInDialog(this.assignCaseButton, this.assignCaseSubmitButton)
+    }
+
+    // Persona overlay obscures the checkbox — _selectFirstInDialog uses JS click to bypass
     async addFirstAffiliatedParty() {
-        await this.addAffiliatedPartyButton.click()
-        await this.dialog.waitForDisplayed()
-        await browser.waitUntil(
-            async () => (await this.dialogCheckboxes).length > 0,
-            { timeout: 10000, interval: 500 }
-        )
-        const firstCheckbox = (await this.dialogCheckboxes)[0]
-        await browser.execute((el) => el.click(), firstCheckbox)
-        await this.addPartySubmitButton.click()
-        await this.dialog.waitForDisplayed({ reverse: true, timeout: 5000 })
+        await this._selectFirstInDialog(this.addAffiliatedPartyButton, this.addPartySubmitButton, true)
     }
 
     async clickCreate() {

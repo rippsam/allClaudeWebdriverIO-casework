@@ -54,7 +54,7 @@ describe('Create Case - Submit', () => {
 
     it('should create a case with a boundary-length case name and redirect away from new case page', async () => {
         // MTQA-5259 — case name at max length (75 chars)
-        createdCaseName = 'a'.repeat(75)
+        createdCaseName = NewCase.maxLengthCaseName
         await NewCase.fillCaseName(createdCaseName)
         await NewCase.selectTodayRetainedDate()
         await NewCase.selectRetainedBy(NewCase.retainedByClient)
