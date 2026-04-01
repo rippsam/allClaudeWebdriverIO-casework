@@ -1,7 +1,7 @@
 import { $ } from '@wdio/globals'
-import BasePage from './basePage.js'
+import Base from './base.js'
 
-class LoginPage extends BasePage {
+class Login extends Base {
     get usernameField() {
         return $('input[name="username"]')
     }
@@ -25,4 +25,4 @@ class LoginPage extends BasePage {
     }
 }
 
-export default new LoginPage()
+export default new Login()

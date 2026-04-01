@@ -1,7 +1,7 @@
 import { browser } from '@wdio/globals'
 import { writeFileSync, readFileSync, existsSync } from 'fs'
-import LoginPage from '../pageobjects/login.js'
-import DashboardPage from '../pageobjects/dashboard.js'
+import Login from '../pageobjects/login.js'
+import Dashboard from '../pageobjects/dashboard.js'
 
 const TOKEN_FILE = '.auth-tokens.json'
 
@@ -23,7 +23,7 @@ async function injectSessionTokens(tokens) {
         Object.entries(t).forEach(([key, value]) => localStorage.setItem(key, value))
     }, tokens)
     await browser.refresh()
-    await DashboardPage.navDashboard.waitForDisplayed({ timeout: 10000, interval: 500 })
+    await Dashboard.navDashboard.waitForDisplayed({ timeout: 10000, interval: 500 })
 }
 
 export async function ensureAuthenticated() {
@@ -31,13 +31,13 @@ export async function ensureAuthenticated() {
         try {
             const tokens = JSON.parse(readFileSync(TOKEN_FILE, 'utf8'))
             await injectSessionTokens(tokens)
-            if (await DashboardPage.navDashboard.isDisplayed()) return
+            if (await Dashboard.navDashboard.isDisplayed()) return
         } catch (e) {
             // tokens expired, fall through to full sign in
         }
     }
-    await LoginPage.navigateToLoginPage()
-    await LoginPage.signIn(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
-    await DashboardPage.navDashboard.waitForDisplayed({ timeout: 15000, interval: 500 })
+    await Login.navigateToLogin()
+    await Login.signIn(process.env.TEST_EMAIL, process.env.TEST_PASSWORD)
+    await Dashboard.navDashboard.waitForDisplayed({ timeout: 15000, interval: 500 })
     await saveSessionTokens()
 }

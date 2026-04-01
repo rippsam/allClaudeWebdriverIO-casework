@@ -1,7 +1,7 @@
 import { $, $$, browser } from '@wdio/globals'
-import BasePage from './basePage.js'
+import Base from './base.js'
 
-class NewCasePage extends BasePage {
+class NewCase extends Base {
     // ── Test data ─────────────────────────────────────────────────────────────
     get xssPayload() { return "<script>alert('xss')</script>" }
     get sqlPayload() { return "' OR '1'='1" }
@@ -197,4 +197,4 @@ class NewCasePage extends BasePage {
     }
 }
 
-export default new NewCasePage()
+export default new NewCase()

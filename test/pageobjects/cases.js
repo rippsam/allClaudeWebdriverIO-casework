@@ -1,7 +1,7 @@
 import { $, $$, browser } from '@wdio/globals'
-import BasePage from './basePage.js'
+import Base from './base.js'
 
-class CasesPage extends BasePage {
+class Cases extends Base {
     // ── Static elements ───────────────────────────────────────────────────────
 
     get menuDeleteOption() {
@@ -120,4 +120,4 @@ class CasesPage extends BasePage {
     }
 }
 
-export default new CasesPage()
+export default new Cases()

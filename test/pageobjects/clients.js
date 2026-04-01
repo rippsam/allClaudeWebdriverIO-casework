@@ -1,7 +1,7 @@
 import { $, browser } from '@wdio/globals'
-import BasePage from './basePage.js'
+import Base from './base.js'
 
-class ClientsPage extends BasePage {
+class Clients extends Base {
     get createButton() {
         return $('[data-testid="parties-create-button"]')
     }
@@ -40,4 +40,4 @@ class ClientsPage extends BasePage {
     }
 }
 
-export default new ClientsPage()
+export default new Clients()

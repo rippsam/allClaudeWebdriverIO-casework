@@ -1,7 +1,7 @@
 import { $ } from '@wdio/globals'
-import BasePage from './basePage.js'
+import Base from './base.js'
 
-class DashboardPage extends BasePage {
+class Dashboard extends Base {
     get navDashboard() {
         return $('[data-testid="vert-nav-dashboard"]')
     }
@@ -11,4 +11,4 @@ class DashboardPage extends BasePage {
     }
 }
 
-export default new DashboardPage()
+export default new Dashboard()
