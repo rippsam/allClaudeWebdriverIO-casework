@@ -12,6 +12,24 @@ class Cases extends Base {
         return $('button=Yes')
     }
 
+    // ── Dynamic elements ──────────────────────────────────────────────────────
+
+    get rows() {
+        return $$('[role="row"]')
+    }
+
+    deleteButton(row) {
+        return row.$('button[aria-label="Delete"]')
+    }
+
+    moreItemsButton(row) {
+        return row.$('button[aria-label="More items"]')
+    }
+
+    caseNameButton(name) {
+        return $(`button=${name}`)
+    }
+
     // ── Navigation ────────────────────────────────────────────────────────────
 
     navigateToCases() {
@@ -40,7 +58,7 @@ class Cases extends Base {
     // ── Row finder ────────────────────────────────────────────────────────────
 
     async findRowByName(name) {
-        const rows = await $$('[role="row"]')
+        const rows = await this.rows
         for (const row of rows) {
             const btns = await row.$$('button')
             for (const btn of btns) {
@@ -80,7 +98,7 @@ class Cases extends Base {
             if (!exists) break
             const row = await this.findRowByName(name).catch(() => null)
             if (!row) break
-            const deleteBtn = await row.$('button[aria-label="Delete"]')
+            const deleteBtn = await this.deleteButton(row)
             await this.clickHiddenDeleteBtn(deleteBtn)
             await this.deleteConfirmButton.waitForDisplayed({ timeout: 5000 })
             await this.deleteConfirmButton.click()
@@ -96,7 +114,7 @@ class Cases extends Base {
         await this.navigateToCases()
         await this.waitForCaseVisible(name)
         const row = await this.findRowByName(name)
-        const deleteBtn = await row.$('button[aria-label="Delete"]')
+        const deleteBtn = await this.deleteButton(row)
         await this.clickHiddenDeleteBtn(deleteBtn)
         await this.deleteConfirmButton.waitForDisplayed({ timeout: 5000 })
         await this.deleteConfirmButton.click()
@@ -107,10 +125,10 @@ class Cases extends Base {
     async deleteByThreeDots(name) {
         await this.navigateToCases()
         await this.waitForCaseVisible(name)
-        const nameBtn = await $(`button=${name}`)
+        const nameBtn = await this.caseNameButton(name)
         await nameBtn.moveTo()
         const row = await this.findRowByName(name)
-        const dotsBtn = await row.$('button[aria-label="More items"]')
+        const dotsBtn = await this.moreItemsButton(row)
         await this.pointerClick(dotsBtn)
         await this.menuDeleteOption.waitForDisplayed({ timeout: 5000 })
         await this.menuDeleteOption.click()

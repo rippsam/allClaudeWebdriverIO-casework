@@ -94,6 +94,11 @@ class NewCase extends Base {
         return $$('[role="option"]')
     }
 
+    // First dropdown option — used to wait for the list to appear
+    get firstDropdownOption() {
+        return $('[role="option"]')
+    }
+
     // Modal/dialog that opens when Assign Case / Add Affiliated Party / Add Event is clicked
     get dialog() {
         return $('[role="dialog"]')
@@ -141,12 +146,12 @@ class NewCase extends Base {
 
     async openCaseTypeDropdown() {
         await this.caseTypeCombobox.click()
-        await $('[role="option"]').waitForDisplayed()
+        await this.firstDropdownOption.waitForDisplayed()
     }
 
     async openCaseStatusDropdown() {
         await this.caseStatusCombobox.click()
-        await $('[role="option"]').waitForDisplayed()
+        await this.firstDropdownOption.waitForDisplayed()
     }
 
     async selectFirstCaseType() {
