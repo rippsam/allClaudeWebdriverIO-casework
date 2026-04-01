@@ -46,6 +46,8 @@ test/
 - Selectors are always getters defined in page objects — never strings in spec files
 - Spec files contain only `describe`/`it`/`before`/`beforeEach`/`afterEach` blocks — no helper functions, no `const`/`let` declarations outside test scope, no logic
 - All test data is stored as getters on the relevant page object, prefixed with `AUTOTEST`
+- `NewCase` generates a datetime string once in its constructor (`this._ts`) and appends it to all name getters so each run inputs unique values — add new name getters the same way
+- `retainedByClient`, `xssPayload`, and `sqlPayload` are intentionally static: the client name must be stable so `ensureClientExists` doesn't accumulate a new client on every run, and the payloads test specific content
 - Each test includes a Jira comment: `// MTQA-XXXX — description`
 - No `browser.pause()` or arbitrary sleeps — always use `waitForDisplayed`, `waitForExist`, or `waitUntil`
 - No wdio boilerplate names (`inputUsername`, `btnSubmit`, `ensureLoggedIn`, etc.)
