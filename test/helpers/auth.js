@@ -5,6 +5,19 @@ import Dashboard from '../pageobjects/dashboard.js'
 
 const TOKEN_FILE = '.auth-tokens.json'
 
+function tokensAreExpired(tokens) {
+    for (const value of Object.values(tokens)) {
+        if (typeof value !== 'string') continue
+        const parts = value.split('.')
+        if (parts.length !== 3) continue
+        try {
+            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString())
+            if (payload.exp) return Date.now() / 1000 > payload.exp
+        } catch {}
+    }
+    return false
+}
+
 async function saveSessionTokens() {
     const tokens = await browser.execute(() => {
         const items = {}
@@ -23,17 +36,17 @@ async function injectSessionTokens(tokens) {
         Object.entries(t).forEach(([key, value]) => localStorage.setItem(key, value))
     }, tokens)
     await browser.refresh()
-    await Dashboard.navDashboard.waitForDisplayed({ timeout: 10000, interval: 500 })
+    await Dashboard.navDashboard.waitForDisplayed({ timeout: 5000, interval: 300 })
 }
 
 export async function ensureAuthenticated() {
     if (existsSync(TOKEN_FILE)) {
-        try {
-            const tokens = JSON.parse(readFileSync(TOKEN_FILE, 'utf8'))
-            await injectSessionTokens(tokens)
-            if (await Dashboard.navDashboard.isDisplayed()) return
-        } catch (e) {
-            // tokens expired, fall through to full sign in
+        const tokens = JSON.parse(readFileSync(TOKEN_FILE, 'utf8'))
+        if (!tokensAreExpired(tokens)) {
+            try {
+                await injectSessionTokens(tokens)
+                if (await Dashboard.navDashboard.isDisplayed()) return
+            } catch {}
         }
     }
     await Login.navigateToLoginPage()
